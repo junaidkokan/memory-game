@@ -33,6 +33,7 @@ function shuffle(array) {
     return array;
 }
 
+//Shuffling the cards before display
 function shuffle_cards(cards){
   cards = shuffle(cards);
   let ul_list = document.querySelector("ul[class=deck]");
@@ -70,6 +71,7 @@ let open_cards = [];
 let num_moves = 0;
 let rating_flag = 0;
 let rating = document.querySelector("ul[class=stars]");
+let start_time = new Date();
 
 function show_card(event){
     if (event.target.nodeName === "LI"){
@@ -106,6 +108,22 @@ function check_match(){
 
 function check_win_condition(){
   if (open_cards.length == cards.length){
+    document.querySelector(".game-start").style.display = "none";
+    document.querySelector(".game-finish").style.display = "block";
+    document.querySelector(".moves-result").textContent = num_moves;
+    [minutes, seconds] = timer()
+    document.querySelector(".time-result").textContent = minutes + ":" + seconds;
+
+    let num_stars;
+    if (num_moves <= 10){
+      num_stars = 3;
+    } else if (num_moves > 10 && num_moves <= 20) {
+      num_stars = 2;
+    } else {
+      num_stars = 1;
+    }
+
+    document.querySelector(".rating-result").textContent = num_stars;
     console.log("Game Won");
     console.log(num_moves);
   }
@@ -137,6 +155,9 @@ function update_stats(){
   }
 }
 
+
+
+// function that has game flow logic
 function main(event){
   update_stats();
   let num_open = temp_open.length;
@@ -157,10 +178,26 @@ function main(event){
 }
 
 
+//timer functionality that updates the DOM every second
+function timer(){
+  current_time = new Date();
+  time_elapsed_ms = current_time - start_time;
+  minutes = (Math.floor(time_elapsed_ms / 60000));
+  seconds = Math.floor(time_elapsed_ms/1000) - (minutes * 60);
+  seconds = seconds < 10 ? "0" + seconds: seconds;
+  let timer_element = document.querySelector(".timer");
+  timer_element.textContent = minutes + ":" + seconds;
+  return [minutes, seconds];
+}
+setInterval(timer, 1000);
 
+
+// functionality to play the game through click events
 let deck = document.querySelector("ul[class=deck]");
 deck.addEventListener("click", main);
 
+
+// functionality to reset the game
 let repeat = document.querySelector(".fa-repeat");
 repeat.addEventListener("click", function reset_game(){
   //shuffling cards
@@ -179,4 +216,7 @@ repeat.addEventListener("click", function reset_game(){
     full_star.innerHTML = '<i class="fa fa-star"></i>';
     rating.insertAdjacentElement("afterbegin", full_star);
   }
+
+  //resetting timer
+  start_time = new Date()
 });

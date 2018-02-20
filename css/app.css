@@ -1,12 +1,8 @@
 html {
+   /*outline: 1px solid red !important;*/
     box-sizing: border-box;
 }
 
-* {
-  /* UNcomment the line below to see the html box model*/
-   outline: 1px solid red !important;
-   box-sizing: border-box;
-}
 
 *,
 *::before,
@@ -105,28 +101,38 @@ h1 {
  */
 .score-panel {
     text-align: left;
-    width: 200px;
+    width: 300px;
     margin-bottom: 10px;
 }
 
 
 .score-panel .stars {
-    margin: 0;
+    width: 100px;
     padding: 0;
     display: inline-block;
-    margin: 0 5px 0 0;
+    margin: 0 10px 0 0;
 }
-
 
 .score-panel .stars li {
     list-style: none;
     display: inline-block;
+    float: left;
     padding: 0 3px 0 3px;
 }
+
+.score-panel .moves {
+  margin: 0 5px 0 0;
+}
+
 
 .score-panel .restart {
     float: right;
     cursor: pointer;
+}
+
+
+.game-finish {
+    display: none;
 }
 
 @keyframes shake {
