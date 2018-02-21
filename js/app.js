@@ -108,16 +108,16 @@ function check_match(){
 
 function check_win_condition(){
   if (open_cards.length == cards.length){
-    document.querySelector(".game-start").style.display = "none";
-    document.querySelector(".game-finish").style.display = "block";
+    //document.querySelector(".game-start").style.display = "none";
+    document.querySelector(".modal").style.display = "block";
     document.querySelector(".moves-result").textContent = num_moves;
     [minutes, seconds] = timer()
     document.querySelector(".time-result").textContent = minutes + ":" + seconds;
 
     let num_stars;
-    if (num_moves <= 10){
+    if (num_moves <= 20){
       num_stars = 3;
-    } else if (num_moves > 10 && num_moves <= 20) {
+    } else if (num_moves > 20 && num_moves <= 30) {
       num_stars = 2;
     } else {
       num_stars = 1;
@@ -135,18 +135,18 @@ function update_stats(){
   let moves_ele = document.querySelector(".moves");
   moves_ele.textContent = num_moves;
 
-  if (num_moves === 21){
+  if (num_moves === 31){
     rating_flag = 0;
   }
 
-  if (num_moves > 10 && num_moves <= 20 && rating_flag == 0){
+  if (num_moves > 20 && num_moves <= 30 && rating_flag == 0){
     rating.removeChild(rating.firstElementChild);
     let empty_star = document.createElement('li');
     empty_star.innerHTML = '<i class="fa fa-star-o"></i>';
     rating.appendChild(empty_star);
     rating_flag = 1;
   }
-  else if (num_moves > 20 && rating_flag === 0) {
+  else if (num_moves > 30 && rating_flag === 0) {
     rating.removeChild(rating.firstElementChild);
     let empty_star = document.createElement('li');
     empty_star.innerHTML = '<i class="fa fa-star-o"></i>';
@@ -197,26 +197,34 @@ let deck = document.querySelector("ul[class=deck]");
 deck.addEventListener("click", main);
 
 
-// functionality to reset the game
+// functionality to reset the game by two methods
 let repeat = document.querySelector(".fa-repeat");
-repeat.addEventListener("click", function reset_game(){
-  //shuffling cards
-  shuffle_cards(cards);
+let play_again = document.querySelector(".play-again");
+repeat.addEventListener("click", reset_game);
+play_again.addEventListener("click", reset_game);
 
-  // resetting moves
-  let moves_ele = document.querySelector(".moves");
-  moves_ele.textContent = 0;
 
-  //resetting stars
-  while (rating.firstElementChild){
-    rating.removeChild(rating.firstElementChild);
-  }
-  for (let i = 0; i < 3; i++){
-    let full_star = document.createElement('li');
-    full_star.innerHTML = '<i class="fa fa-star"></i>';
-    rating.insertAdjacentElement("afterbegin", full_star);
-  }
+function reset_game(){
+ //document.querySelector(".game-start").style.display = "flex";
+ document.querySelector(".modal").style.display = "none";
 
-  //resetting timer
-  start_time = new Date()
-});
+ //shuffling cards
+ shuffle_cards(cards);
+
+ // resetting moves
+ let moves_ele = document.querySelector(".moves");
+ moves_ele.textContent = 0;
+
+ //resetting stars
+ while (rating.firstElementChild){
+   rating.removeChild(rating.firstElementChild);
+ }
+ for (let i = 0; i < 3; i++){
+   let full_star = document.createElement('li');
+   full_star.innerHTML = '<i class="fa fa-star"></i>';
+   rating.insertAdjacentElement("afterbegin", full_star);
+ }
+
+ //resetting timer
+ start_time = new Date()
+}
