@@ -1,20 +1,12 @@
-# Memory Game Project
+# Memory Game
 
 ## Table of Contents
 
-* [Instructions](#instructions)
-* [Contributing](#contributing)
+* [Installation](#installation)
+* [How to play](#how-to-play)
 
-## Instructions
+## Installation
+Simply [download](https://github.com/junaidkokan/memory-game/archive/master.zip), or [clone](https://github.com/junaidkokan/memory-game.git), this repository and open the index.html file in a browser of your choice
 
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
-
-To get started, open `js/app.js` and start building out the app's functionality
-
-For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
-
-## Contributing
-
-This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
-
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+## How to play
+It is a browser based card matching game. The gameplay is very simple. You turn over one tile and try to find a matching tile from the remaining hidden tiles. If you select matching tiles, they remain open. Otherwise they close after briefly revealing the pattern behind.The game ends once all cards have been correctly matched
