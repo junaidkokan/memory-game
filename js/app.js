@@ -3,14 +3,10 @@
  */
 let cards = ["fa fa-diamond", "fa fa-paper-plane-o",
              "fa fa-anchor", "fa fa-bolt",
-             "fa fa-cube", "fa fa-anchor",
-             "fa fa-leaf", "fa fa-bicycle",
-             "fa fa-diamond", "fa fa-bomb",
-             "fa fa-leaf", "fa fa-bomb",
-             "fa fa-bolt", "fa fa-bicycle",
-             "fa fa-paper-plane-o", "fa fa-cube"
+             "fa fa-cube", "fa fa-leaf", "fa fa-bicycle",
+             "fa fa-bomb",
            ];
-
+cards = cards.concat(cards);
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -36,10 +32,9 @@ function shuffle(array) {
 //Shuffling the cards before display
 function shuffle_cards(cards){
   cards = shuffle(cards);
-  let ul_list = document.querySelector("ul[class=deck]");
-  while (ul_list.firstChild) {
-      ul_list.removeChild(ul_list.firstChild);
-  }
+  document.querySelector(".deck").remove();
+  let ul_list = document.createElement("ul");
+  ul_list.classList.add("deck");
 
   for (card of cards){
     let list_ele = document.createElement("li");
@@ -50,6 +45,7 @@ function shuffle_cards(cards){
     list_ele.insertAdjacentElement("afterbegin", icon_ele);
     ul_list.insertAdjacentElement("beforeend", list_ele);
   }
+  document.querySelector(".game-start").appendChild(ul_list);
 }
 
 shuffle_cards(cards);
@@ -200,7 +196,7 @@ function main(event){
 
 
 // functionality to play the game through click events
-let deck = document.querySelector("ul[class=deck]");
+let deck = document.querySelector(".deck");
 deck.addEventListener("click", main);
 
 
@@ -215,7 +211,7 @@ play_again.addEventListener("click", function(){
 });
 
 
-function reset_game(intervalID){
+function reset_game(interval_id){
  //document.querySelector(".game-start").style.display = "flex";
  document.querySelector(".modal").style.display = "none";
 
@@ -240,8 +236,13 @@ function reset_game(intervalID){
  }
 
  //resetting timer
- start_time = new Date()
- clearInterval(intervalID);
+ start_time = new Date();
+ clearInterval(interval_id);
+ intervalID = undefined;
  let timer_element = document.querySelector(".timer");
  timer_element.textContent = "0:00";
+
+ // Adding listner again since we removed the deck when shuffling
+ let deck = document.querySelector(".deck");
+ deck.addEventListener("click", main);
 }
