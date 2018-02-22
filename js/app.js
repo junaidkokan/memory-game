@@ -71,12 +71,19 @@ let open_cards = [];
 let num_moves = 0;
 let rating_flag = 0;
 let rating = document.querySelector("ul[class=stars]");
-let start_time = new Date();
+let start_time;
+let intervalID;
 
+// function that reveals a card.
 function show_card(event){
+    //Checks if a click was made on a card
     if (event.target.nodeName === "LI"){
-      event.target.setAttribute("class", "card open show");
-      temp_open.push(event.target);
+      //Checks if the card that was clicked is already open
+      if (event.target.classList.toString() !== "card open show"){
+        event.target.setAttribute("class", "card open show");
+        temp_open.push(event.target);
+        num_moves += 1;
+      }
     }
 }
 
@@ -89,8 +96,9 @@ function close_cards(){
 
 function check_match(){
   let [card1, card2] = temp_open;
-  let decision = card1.isEqualNode(card2);
-  if (decision) {
+  const matching_cards = card1.isEqualNode(card2) && (card1 !== card2);
+  const unmatching_cards = !card1.isEqualNode(card2) && (card1 !== card2);
+  if (matching_cards) {
     console.log("same cards");
     // keep cards open
     for (card of temp_open){
@@ -99,7 +107,7 @@ function check_match(){
     }
     temp_open = [];
   }
-  else {
+  else if (unmatching_cards) {
     //close cards
     console.log("different cards");
     setTimeout(close_cards, 500);
@@ -131,7 +139,6 @@ function check_win_condition(){
 
 
 function update_stats(){
-  num_moves += 1;
   let moves_ele = document.querySelector(".moves");
   moves_ele.textContent = num_moves;
 
@@ -156,28 +163,6 @@ function update_stats(){
 }
 
 
-
-// function that has game flow logic
-function main(event){
-  update_stats();
-  let num_open = temp_open.length;
-  if (num_open < 1){
-    // open the card
-    show_card(event);
-  }
-  else if (num_open < 2) {
-    // open the card
-    show_card(event);
-
-    // check for match or not match
-    check_match();
-
-    // check for win condition
-    check_win_condition()
-  }
-}
-
-
 //timer functionality that updates the DOM every second
 function timer(){
   current_time = new Date();
@@ -189,7 +174,27 @@ function timer(){
   timer_element.textContent = minutes + ":" + seconds;
   return [minutes, seconds];
 }
-setInterval(timer, 1000);
+
+
+// function that has game flow logic
+function main(event){
+  if (num_moves === 0){
+    start_time = new Date();
+    intervalID = setInterval(timer, 1000);
+  }
+  // open the card
+  show_card(event);
+
+  update_stats();
+
+  // If we have 2 cards open
+  if (temp_open.length == 2) {
+    // check for match or not match
+    check_match();
+    // check for win condition
+    check_win_condition()
+  }
+}
 
 
 // functionality to play the game through click events
@@ -200,11 +205,15 @@ deck.addEventListener("click", main);
 // functionality to reset the game by two methods
 let repeat = document.querySelector(".fa-repeat");
 let play_again = document.querySelector(".play-again");
-repeat.addEventListener("click", reset_game);
-play_again.addEventListener("click", reset_game);
+repeat.addEventListener("click", function(){
+  reset_game(intervalID);
+});
+play_again.addEventListener("click", function(){
+    reset_game(intervalID);
+});
 
 
-function reset_game(){
+function reset_game(intervalID){
  //document.querySelector(".game-start").style.display = "flex";
  document.querySelector(".modal").style.display = "none";
 
@@ -212,6 +221,7 @@ function reset_game(){
  shuffle_cards(cards);
 
  // resetting moves
+ num_moves = 0;
  let moves_ele = document.querySelector(".moves");
  moves_ele.textContent = 0;
 
@@ -227,4 +237,7 @@ function reset_game(){
 
  //resetting timer
  start_time = new Date()
+ clearInterval(intervalID);
+ let timer_element = document.querySelector(".timer");
+ timer_element.textContent = "0:00";
 }
