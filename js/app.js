@@ -82,7 +82,6 @@ function show_card(event){
       if (event.target.classList.toString() !== "card open show"){
         event.target.setAttribute("class", "card open show");
         temp_open.push(event.target);
-        num_moves += 1;
       }
     }
 }
@@ -94,6 +93,8 @@ function close_cards(){
   temp_open = [];
 }
 
+// checking match of cards and incrementing move by 1 and
+// if matched keeping them open, clearing temp_open
 function check_match(){
   let [card1, card2] = temp_open;
   const matching_cards = card1.isEqualNode(card2) && (card1 !== card2);
@@ -106,10 +107,12 @@ function check_match(){
       open_cards.push(card);
     }
     temp_open = [];
+    num_moves += 1;
   }
   else if (unmatching_cards) {
     //close cards
     console.log("different cards");
+    num_moves += 1;
     setTimeout(close_cards, 500);
   }
 }
@@ -178,19 +181,18 @@ function timer(){
 
 // function that has game flow logic
 function main(event){
-  if (num_moves === 0){
+  if (!intervalID){
     start_time = new Date();
     intervalID = setInterval(timer, 1000);
   }
   // open the card
   show_card(event);
 
-  update_stats();
-
   // If we have 2 cards open
   if (temp_open.length == 2) {
     // check for match or not match
     check_match();
+    update_stats();
     // check for win condition
     check_win_condition()
   }
@@ -226,8 +228,6 @@ function reset_game(intervalID){
  num_moves = 0;
  let moves_ele = document.querySelector(".moves");
  moves_ele.textContent = 0;
-
-
 
  //resetting stars
  while (rating.firstElementChild){
