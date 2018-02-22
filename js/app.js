@@ -217,13 +217,17 @@ function reset_game(intervalID){
  //document.querySelector(".game-start").style.display = "flex";
  document.querySelector(".modal").style.display = "none";
 
- //shuffling cards
+ //shuffling cards and clearing open cards memory
  shuffle_cards(cards);
+ temp_open = [];
+ open_cards = [];
 
  // resetting moves
  num_moves = 0;
  let moves_ele = document.querySelector(".moves");
  moves_ele.textContent = 0;
+
+
 
  //resetting stars
  while (rating.firstElementChild){
